@@ -39,10 +39,6 @@ public class EquationPanel extends JPanel {
 		this.add(lblYFx);
 		
 		btnAdd = new JButton("ADD");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnAdd.setBounds(80, 73, 96, 35);
 		this.add(btnAdd);
 		
@@ -67,8 +63,13 @@ public class EquationPanel extends JPanel {
 		equationTextField.setText(equation);
 	}
 	
+	public JButton getAddButton() {
+		return btnAdd;
+	}
 	
-	
+	public JButton getDeleteButton() {
+		return btnDel;
+	}
 	
 
 }

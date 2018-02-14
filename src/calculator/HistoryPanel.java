@@ -25,5 +25,15 @@ public class HistoryPanel extends JPanel{
 		lblHistory.setBounds(66, 6, 75, 16);
 		this.add(lblHistory);
 	}
+	
+	public void addToHistory(String equation) {
+		// TODO: Add to history and then refresh list
+	}
+
+	public void deleteFromHistory(String string) {
+		// TODO Delete from history and refresh list
+		
+	}
+	
 
 }
