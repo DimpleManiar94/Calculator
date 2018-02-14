@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 
 
 
@@ -41,6 +40,7 @@ public class EquationPanel extends JPanel {
 		btnAdd = new JButton("ADD");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				onAddButtonClick(e);
 			}
 		});
 		btnAdd.setBounds(80, 73, 96, 35);
@@ -54,7 +54,7 @@ public class EquationPanel extends JPanel {
 		lblSelectAColor.setBounds(80, 120, 123, 16);
 		this.add(lblSelectAColor);
 		
-		colorComboBox = new JColorChooser();
+		 colorComboBox = new JColorChooser();
 		colorComboBox.setBounds(76, 139, 127, 27);
 		this.add(colorComboBox);
 	}
@@ -66,6 +66,12 @@ public class EquationPanel extends JPanel {
 	public void setText(String equation) {
 		equationTextField.setText(equation);
 	}
+	
+	public void onAddButtonClick(ActionEvent e) {
+		String equation = getText();
+		 
+	}
+	
 	
 	
 	
