@@ -11,6 +11,10 @@ import java.awt.event.ActionEvent;
 public class Calculator {
 
 	private JFrame frame;
+	private KeyboardPanel keyBoardPanel;
+	private HistoryPanel historyPanel;
+	private EquationPanel equationPanel;
+	private ScreenPanel screenPanel;
 
 	/**
 	 * Launch the application.
@@ -44,25 +48,48 @@ public class Calculator {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		KeyboardPanel keyBoardPanel = new KeyboardPanel();
+		keyBoardPanel = new KeyboardPanel();
 		keyBoardPanel.setBounds(6, 445, 338, 267);
 		frame.getContentPane().add(keyBoardPanel);
 		keyBoardPanel.setLayout(null);
 		
-		HistoryPanel historyPanel = new HistoryPanel();
+		historyPanel = new HistoryPanel();
 		historyPanel.setBounds(6, 222, 338, 159);
 		frame.getContentPane().add(historyPanel);
 		historyPanel.setLayout(null);
 				
-		EquationPanel equationPanel = new EquationPanel();
+		equationPanel = new EquationPanel();
 		equationPanel.setBounds(6, 6, 338, 189);
 		frame.getContentPane().add(equationPanel);
 		equationPanel.setLayout(null);
+		
 			
-		ScreenPanel screenPanel_1 = new ScreenPanel();
-		screenPanel_1.setBounds(6, 393, 338, 47);
-		frame.getContentPane().add(screenPanel_1);
-		screenPanel_1.setLayout(null);	
+		screenPanel = new ScreenPanel();
+		screenPanel.setBounds(6, 393, 338, 47);
+		frame.getContentPane().add(screenPanel);
+		screenPanel.setLayout(null);	
+	
+		initEquationListeners();
 			
 	}
+	
+	private void initEquationListeners() {
+		equationPanel.getAddButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// If this is a click
+				String equation = equationPanel.getText();
+				historyPanel.addToHistory(equation);
+			}
+		});
+		
+		equationPanel.getDeleteButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO: Get selected item from historyPanel. Something like
+				// historyPanel.getSelectedItem();
+				historyPanel.deleteFromHistory(""); // Replace with actual equation
+			}
+		});
+	}
+	
+	
 }
