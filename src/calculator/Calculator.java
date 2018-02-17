@@ -163,8 +163,11 @@ public class Calculator {
 					}
 					else if(state.equals("result") || state.equals("pi/e") || state.equals("number")) {
 						String lastChar = String.valueOf(text.charAt(text.length()-1));
-						while(text.length() != 0 || lastChar.equals("+") || lastChar.equals("-") || lastChar.equals("*") || lastChar.equals("/") || lastChar.equals("^") ) {
+						while(text.length() != 0 && (!lastChar.equals("+") ^ !lastChar.equals("-") ^ !lastChar.equals("*") ^ !lastChar.equals("/") ^ !lastChar.equals("^") )) {
 							text = text.substring(0, text.length()-1);
+							if (text.length() > 0) {
+								lastChar = String.valueOf(text.charAt(text.length()-1));
+							}
 						}
 					}
 					String btnText = valueButton.getText();
