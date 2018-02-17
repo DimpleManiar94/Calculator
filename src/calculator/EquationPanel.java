@@ -15,7 +15,7 @@ public class EquationPanel extends JPanel {
 	private JButton btnAdd;
 	private JButton btnDel;
 	private JLabel lblSelectAColor;
-	private JColorChooser colorComboBox;
+	private JComboBox<String> colorComboBox;
 	
 	
 	public EquationPanel() {
@@ -38,11 +38,6 @@ public class EquationPanel extends JPanel {
 		this.add(lblYFx);
 		
 		btnAdd = new JButton("ADD");
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				onAddButtonClick(e);
-			}
-		});
 		btnAdd.setBounds(80, 73, 96, 35);
 		this.add(btnAdd);
 		
@@ -54,27 +49,56 @@ public class EquationPanel extends JPanel {
 		lblSelectAColor.setBounds(80, 120, 123, 16);
 		this.add(lblSelectAColor);
 		
-		 colorComboBox = new JColorChooser();
+		String[] colors = {"BLACK", "BLUE", "GREEN", "RED", "YELLOW"};
+		colorComboBox = new JComboBox<String>(colors);
 		colorComboBox.setBounds(76, 139, 127, 27);
 		this.add(colorComboBox);
+		colorComboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String color = colorComboBox.getSelectedItem().toString();
+				changeColorOfText(color);
+			}
+		});
 	}
 	
-	public String getText() {
+	public String getEquation() {
 		return equationTextField.getText();
 	}
 	
-	public void setText(String equation) {
+	public void setEquation(String equation) {
 		equationTextField.setText(equation);
 	}
 	
-	public void onAddButtonClick(ActionEvent e) {
-		String equation = getText();
-		 
+	public JButton getAddButton() {
+		return btnAdd;
 	}
 	
+	public JButton getDeleteButton() {
+		return btnDel;
+	}
 	
-	
-	
-	
+	public void changeColorOfText(String color) {
+		switch(color) {
+		case "BLACK":
+			equationTextField.setForeground(Color.BLACK);
+			break;
+		case "BLUE":
+			equationTextField.setForeground(Color.BLUE);
+			break;
+		case "RED":
+			equationTextField.setForeground(Color.RED);
+			break;
+		case "GREEN":
+			equationTextField.setForeground(Color.GREEN);
+			break;
+		case "YELLOW":
+			equationTextField.setForeground(Color.YELLOW);
+			break;
+			default:
+				equationTextField.setForeground(Color.BLACK);
+				break;
+		}
+		
+	}
 
 }
