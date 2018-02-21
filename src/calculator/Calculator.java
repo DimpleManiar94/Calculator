@@ -17,7 +17,6 @@ public class Calculator {
 	private EquationPanel equationPanel;
 	private ScreenPanel screenPanel;
 	boolean allowDot = true;
-	//boolean initialState = true;
 	double answer = 0;
 	String state = "initial";
 
@@ -84,7 +83,7 @@ public class Calculator {
 		equationPanel.getAddButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// If this is a click
-				String equation = equationPanel.getEquation();
+				String equation = "y = f(x) = " + equationPanel.getEquation();
 				historyPanel.addToHistory(equation);
 			}
 		});
@@ -101,14 +100,13 @@ public class Calculator {
 		historyPanel.getLoadButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String equation = historyPanel.getEquationOnLoadButtonClick();
+				equation = equation.substring(11, equation.length());
 				equationPanel.setEquation(equation);
 			}
 		});
 	}
 	
 	private void initKeyboardListeners() {
-		
-		
 		
 		keyBoardPanel.getClearButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,7 +129,7 @@ public class Calculator {
 		for(JButton numberButton: keyBoardPanel.getNumberButtons()) {
 			numberButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//handle 2 cases else
+					
 					String text = screenPanel.getText();
 					if(state.equals("initial")) {
 						if(String.valueOf(text.charAt(text.length()-1)).equals("0")) {
@@ -140,8 +138,11 @@ public class Calculator {
 					}
 					else if(state.equals("result") || state.equals("pi/e")) {
 						String lastChar = String.valueOf(text.charAt(text.length()-1));
-						while( text.length() != 0 || ( !lastChar.equals("+") && !lastChar.equals("-") && !lastChar.equals("*") && !lastChar.equals("/") && !lastChar.equals("^") )) {
+						while(text.length() != 0 && (!lastChar.equals("+") ^ !lastChar.equals("-") ^ !lastChar.equals("*") ^ !lastChar.equals("/") ^ !lastChar.equals("^") )) {
 							text = text.substring(0, text.length()-1);
+							if (text.length() > 0) {
+								lastChar = String.valueOf(text.charAt(text.length()-1));
+							}
 						}
 					}
 					text = text + numberButton.getText();
@@ -253,7 +254,7 @@ public class Calculator {
             char ch = input.charAt(i);
             if (ch == '-')
                 temp = "-" + temp;
-            else if (ch != '+' &&  ch != '*' && ch != '/')
+            else if (ch != '+' &&  ch != '*' && ch != '/' && ch !='^')
                temp = temp + ch;
             else
             {
@@ -265,9 +266,9 @@ public class Calculator {
         val.push(Double.parseDouble(temp));
         /* Create char array of operators as per precedence */
         /* -ve sign is already taken care of while storing */
-        char operators[] = {'/','*','+'};
+        char operators[] = {'^', '/','*','+'};
         /* Evaluation of expression */
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             boolean it = false;
             while (!op.isEmpty())
@@ -278,19 +279,24 @@ public class Calculator {
                 if (optr == operators[i])
                 {
                     /* if operator matches evaluate and store in temporary stack */
-                    if (i == 0)
+                	if( i == 0) {
+                		valtmp.push(Math.pow(v2, v1));
+                		it = true;
+                		break;
+                	}
+                	else  if (i == 1)
                     {
                         valtmp.push(v2 / v1);
                         it = true;
                         break;
                     }
-                    else if (i == 1)
+                    else if (i == 2)
                     {
                         valtmp.push(v2 * v1);
                         it = true;
                         break;
                     }
-                    else if (i == 2)
+                    else if (i == 3)
                     {
                         valtmp.push(v2 + v1);
                         it = true;
@@ -317,6 +323,4 @@ public class Calculator {
         return result;
         
 	}
-	
-	
 }
