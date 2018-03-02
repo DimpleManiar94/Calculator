@@ -16,6 +16,8 @@ public class Calculator {
 	private HistoryPanel historyPanel;
 	private EquationPanel equationPanel;
 	private ScreenPanel screenPanel;
+	private GraphPanel graphPanel;
+	
 	boolean allowDot = true;
 	double answer = 0;
 	String state = "initial";
@@ -48,7 +50,7 @@ public class Calculator {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 350, 700);
+		frame.setBounds(100, 100, 1200, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -72,6 +74,13 @@ public class Calculator {
 		screenPanel.setBounds(6, 393, 338, 47);
 		frame.getContentPane().add(screenPanel);
 		screenPanel.setLayout(null);	
+		
+		graphPanel = new GraphPanel();
+		graphPanel.setBounds(370, 35, 795, 600);
+		frame.getContentPane().add(graphPanel);
+		graphPanel.setLayout(null);
+		graphPanel.setBackground(Color.LIGHT_GRAY);
+		
 	
 		initEquationListeners();
 		initHistoryListeners();
