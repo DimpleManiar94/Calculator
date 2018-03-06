@@ -65,30 +65,47 @@ public class Calculator {
 		historyPanel.setLayout(null);
 				
 		equationPanel = new EquationPanel();
-		equationPanel.setBounds(6, 6, 338, 189);
+		equationPanel.setBounds(6, 6, 338, 204);
 		frame.getContentPane().add(equationPanel);
 		equationPanel.setLayout(null);
-		
-			
+				
 		screenPanel = new ScreenPanel();
 		screenPanel.setBounds(6, 393, 338, 47);
 		frame.getContentPane().add(screenPanel);
 		screenPanel.setLayout(null);	
 		
 		graphPanel = new GraphPanel();
-		graphPanel.setBounds(370, 35, 795, 600);
+		graphPanel.setBounds(370, 35, 794, 600);
 		frame.getContentPane().add(graphPanel);
-		graphPanel.setLayout(null);
+		//graphPanel.setLayout(null);
 		graphPanel.setBackground(Color.LIGHT_GRAY);
 		
 	
 		initEquationListeners();
 		initHistoryListeners();
-		initKeyboardListeners();
-			
+		initKeyboardListeners();			
 	}
 	
 	private void initEquationListeners() {
+		equationPanel.getPlotButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String equation = equationPanel.getEquation();
+				graphPanel.setGraphEquation(equation);
+				String xRange = equationPanel.getXRange();
+				int xFrom = Integer.parseInt(xRange.substring(xRange.indexOf("[") + 1, xRange.indexOf(",")));
+				int xTo = Integer.parseInt(xRange.substring(xRange.indexOf(",") + 1, xRange.indexOf("]")));
+				graphPanel.setXRange(xTo - xFrom);
+				String yRange = equationPanel.getYRange();
+				int yFrom = Integer.parseInt(yRange.substring(yRange.indexOf("[") + 1, yRange.indexOf(",")));
+				int yTo = Integer.parseInt(yRange.substring(yRange.indexOf(",") + 1, yRange.indexOf("]")));
+				graphPanel.setYRange(yTo - yFrom);
+				graphPanel.plotGraph();
+				historyPanel.addToHistory("PLOT: y = " + equation);
+			}
+		});
+	}
+	
+	/*private void initEquationListeners() {
 		equationPanel.getAddButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// If this is a click
@@ -103,13 +120,16 @@ public class Calculator {
 			}
 		});
 		
-	}
+	}*/
 	
 	private void initHistoryListeners() {
 		historyPanel.getLoadButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String equation = historyPanel.getEquationOnLoadButtonClick();
-				equation = equation.substring(11, equation.length());
+				// load string from history list after =
+				//eg Plot: y = x+1
+				equation = equation.substring(equation.indexOf("=") + 2);
+				//equation = equation.substring(11, equation.length());
 				equationPanel.setEquation(equation);
 			}
 		});
@@ -201,7 +221,7 @@ public class Calculator {
 			resultOperationButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String text = screenPanel.getText();
-					double result = Double.parseDouble(evaluateExpression(text));					
+					double result = ValidateEquation.evaluateExpression(text);					
 					String operation = resultOperationButton.getText();
 					switch(operation) {
 					case "sin":
@@ -247,89 +267,5 @@ public class Calculator {
 				}
 			});
 		}
-	}
-	
-	public String evaluateExpression(String equation) {
-		Stack<Integer> op  = new Stack<Integer>();
-        Stack<Double> val = new Stack<Double>();
-        Stack<Integer> optmp  = new Stack<Integer>();
-        Stack<Double> valtmp = new Stack<Double>();
-        String input = "0" + equation;
-        input = input.replaceAll("-","+-");
-        /* Store operands and operators in respective stacks */
-        String temp = "";
-        for (int i = 0;i < input.length();i++)
-        {
-            char ch = input.charAt(i);
-            if (ch == '-')
-                temp = "-" + temp;
-            else if (ch != '+' &&  ch != '*' && ch != '/' && ch !='^')
-               temp = temp + ch;
-            else
-            {
-                val.push(Double.parseDouble(temp));
-                op.push((int)ch);
-                temp = "";
-            }
-        }
-        val.push(Double.parseDouble(temp));
-        /* Create char array of operators as per precedence */
-        /* -ve sign is already taken care of while storing */
-        char operators[] = {'^', '/','*','+'};
-        /* Evaluation of expression */
-        for (int i = 0; i < 4; i++)
-        {
-            boolean it = false;
-            while (!op.isEmpty())
-            {
-                int optr = op.pop();
-                double v1 = val.pop();
-                double v2 = val.pop();
-                if (optr == operators[i])
-                {
-                    /* if operator matches evaluate and store in temporary stack */
-                	if( i == 0) {
-                		valtmp.push(Math.pow(v2, v1));
-                		it = true;
-                		break;
-                	}
-                	else  if (i == 1)
-                    {
-                        valtmp.push(v2 / v1);
-                        it = true;
-                        break;
-                    }
-                    else if (i == 2)
-                    {
-                        valtmp.push(v2 * v1);
-                        it = true;
-                        break;
-                    }
-                    else if (i == 3)
-                    {
-                        valtmp.push(v2 + v1);
-                        it = true;
-                        break;
-                    }                                        
-                }
-                else
-                {
-                    valtmp.push(v1);
-                    val.push(v2);
-                    optmp.push(optr);
-                }                
-            }    
-            /* Push back all elements from temporary stacks to main stacks */            
-            while (!valtmp.isEmpty())
-                val.push(valtmp.pop());
-            while (!optmp.isEmpty())
-                op.push(optmp.pop());
-            /* Iterate again for same operator */
-            if (it)
-                i--;                            
-        }  
-        String result = val.pop().toString();
-        return result;
-        
 	}
 }
