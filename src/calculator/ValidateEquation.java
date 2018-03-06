@@ -22,7 +22,7 @@ public class ValidateEquation {
 	                temp = "-" + temp;
 	            else if (ch != '+' &&  ch != '*' && ch != '/' && ch !='^')
 	               temp = temp + ch;
-	            else
+	            else if (temp != "")
 	            {
 	                val.push(Double.parseDouble(temp));
 	                op.push((int)ch);
