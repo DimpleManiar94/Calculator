@@ -65,9 +65,9 @@ public class GraphPanel extends JPanel {
 			x = x / xPixels;
 			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(x))); 
 			y = y * yPixels;
-			y = HEIGHT - y;
+			y = HEIGHT / 2 - y;
 			if(y > 0 && y < HEIGHT) {
-				graph.drawString("*", i, (int) y);
+				graph.drawString(".", i, (int) y);
 			}
 		}
 	}
