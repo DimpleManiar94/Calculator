@@ -23,19 +23,29 @@ public class GraphPanel extends JPanel {
 		
 	}
 	
+	public GraphPanel(String graphEquation, int xRange, int yRange) {
+		this.graphEquation = graphEquation;
+		setXRange(xRange);
+		setYRange(yRange);
+	}
+	
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
 		graph = g;
 		//Draw axis
-		g.drawLine( 0, 600/2, 794, 600/2 );
-		g.drawLine( 794/2, 0, 794/2, 600 );
+		graph.drawLine( 0, 600/2, 794, 600/2 );
+		graph.drawLine( 794/2, 0, 794/2, 600 );
 		//Name axis
-		g.drawString("X-axis", 744, 290);
-		g.drawString("Y-axis", 792/2 + 5, 15);
+		graph.drawString("X-axis", 744, 290);
+		graph.drawString("Y-axis", 792/2 + 5, 15);
 		//draw origin
-		g.drawString("(0,0)", 792/2 + 5, 315);
+		graph.drawString("(0,0)", 792/2 + 5, 315);
+		
+		if (graphEquation != null) {
+			plotGraph();
+		}
 		
 		/*for(int i = 0; i < WIDTH; i++) {
 			//distance of x from origin
@@ -55,14 +65,15 @@ public class GraphPanel extends JPanel {
 			x = x / xPixels;
 			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(x))); 
 			y = y * yPixels;
-			y = HEIGHT - y;
+			y = HEIGHT / 2 - y;
 			if(y > 0 && y < HEIGHT) {
-			graph.drawString("-", i, (int)y);
+				graph.drawString(".", i, (int) y);
 			}
 		}
 	}
 	
 	public void setGraphEquation(String equation) {
+		
 		graphEquation = equation;
 	}
 	
