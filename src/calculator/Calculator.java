@@ -89,22 +89,55 @@ public class Calculator {
 	private void initEquationListeners() {
 		equationPanel.getPlotButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Get equation
 				String equation = equationPanel.getEquation();
-//				graphPanel.setGraphEquation(equation);
+				graphPanel.setGraphEquation(equation);
+		
+				
+				// Get the x range
 				String xRange = equationPanel.getXRange();
 				int xFrom = Integer.parseInt(xRange.substring(xRange.indexOf("[") + 1, xRange.indexOf(",")));
+				graphPanel.setxMin(xFrom);
 				int xTo = Integer.parseInt(xRange.substring(xRange.indexOf(",") + 1, xRange.indexOf("]")));
+				graphPanel.setxMax(xTo);
 				graphPanel.setXRange(xTo - xFrom);
+				
+				// Get the Y range
 				String yRange = equationPanel.getYRange();
 				int yFrom = Integer.parseInt(yRange.substring(yRange.indexOf("[") + 1, yRange.indexOf(",")));
+				graphPanel.setyMin(yFrom);
 				int yTo = Integer.parseInt(yRange.substring(yRange.indexOf(",") + 1, yRange.indexOf("]")));
+				graphPanel.setyMax(yTo);
 				graphPanel.setYRange(yTo - yFrom);
-				GraphPanel panel = new GraphPanel(equation, xTo - xFrom, yTo - yFrom);
-				panel.setBounds(370, 35, 794, 600);
-				frame.getContentPane().add(panel);
-				//graphPanel.setLayout(null);
-				panel.setBackground(Color.LIGHT_GRAY);
+				
+				// Redraw
+				graphPanel.repaint();
+				
+				// Add to history
 				historyPanel.addToHistory("PLOT: y = " + equation);
+			}
+		});
+		
+		equationPanel.getEraseButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Set blank equation and repaint
+				graphPanel.setGraphEquation(null);
+				graphPanel.repaint();
+			}
+			
+		});
+		
+		equationPanel.getColorComboBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Get color string
+				String colorString = equationPanel.getColorComboBox().getSelectedItem().toString();
+				// Get Color object
+				Color color = getColorFromString(colorString);
+				// Change equation text color
+				equationPanel.changeColorOfText(color);
+				// Change graph stroke color
+				graphPanel.setStrokeColor(color);
+				graphPanel.repaint();
 			}
 		});
 	}
@@ -270,6 +303,23 @@ public class Calculator {
 					state = "operation";
 				}
 			});
+		}
+	}
+	
+	private Color getColorFromString(String color) {
+		switch(color) {
+		case "BLACK":
+			return Color.BLACK;
+		case "BLUE":
+			return Color.BLUE;
+		case "RED":
+			return Color.RED;
+		case "GREEN":
+			return Color.GREEN;
+		case "YELLOW":
+			return Color.YELLOW;
+			default:
+				return Color.BLACK;
 		}
 	}
 }

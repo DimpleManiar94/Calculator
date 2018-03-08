@@ -87,12 +87,6 @@ public class EquationPanel extends JPanel {
 		colorComboBox = new JComboBox<String>(colors);
 		colorComboBox.setBounds(76, 174, 127, 27);
 		this.add(colorComboBox);
-		colorComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String color = colorComboBox.getSelectedItem().toString();
-				changeColorOfText(color);
-			}
-		});
 	}
 	
 	public String getEquation() {
@@ -127,27 +121,12 @@ public class EquationPanel extends JPanel {
 		return txtYRange.getText();
 	}
 	
-	public void changeColorOfText(String color) {
-		switch(color) {
-		case "BLACK":
-			equationTextField.setForeground(Color.BLACK);
-			break;
-		case "BLUE":
-			equationTextField.setForeground(Color.BLUE);
-			break;
-		case "RED":
-			equationTextField.setForeground(Color.RED);
-			break;
-		case "GREEN":
-			equationTextField.setForeground(Color.GREEN);
-			break;
-		case "YELLOW":
-			equationTextField.setForeground(Color.YELLOW);
-			break;
-			default:
-				equationTextField.setForeground(Color.BLACK);
-				break;
-		}
+	public JComboBox<String> getColorComboBox() {
+		return colorComboBox;
+	}
+	
+	public void changeColorOfText(Color color) {
+		equationTextField.setForeground(color);	
 		
 	}
 

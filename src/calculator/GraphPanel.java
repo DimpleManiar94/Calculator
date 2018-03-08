@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GraphPanel extends JPanel {
+	
 	private String graphEquation;
 	final int WIDTH = 792;
 	final int HEIGHT = 600;
@@ -17,22 +18,22 @@ public class GraphPanel extends JPanel {
 	private double xPixels;
 	private double yPixels;
 	Graphics graph;
+	private Color strokeColor = Color.BLACK;
+	
+	private int xMin;
+	private int xMax;
+	private int yMin;
+	private int yMax;
 	
 	
 	public GraphPanel() {
 		
 	}
 	
-	public GraphPanel(String graphEquation, int xRange, int yRange) {
-		this.graphEquation = graphEquation;
-		setXRange(xRange);
-		setYRange(yRange);
-	}
-	
+
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		g.setColor(Color.BLACK);
 		graph = g;
 		//Draw axis
 		graph.drawLine( 0, 600/2, 794, 600/2 );
@@ -44,6 +45,7 @@ public class GraphPanel extends JPanel {
 		graph.drawString("(0,0)", 792/2 + 5, 315);
 		
 		if (graphEquation != null) {
+			g.setColor(strokeColor);
 			plotGraph();
 		}
 		
@@ -59,15 +61,15 @@ public class GraphPanel extends JPanel {
 	}
 	
 	public void plotGraph() {
-		for(int i = 0; i < WIDTH; i++) {
+		for(int i = xMin; i < xMax; i++) {
 			//distance of x from origin
-			double x = i - WIDTH / 2;
-			x = x / xPixels;
-			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(x))); 
-			y = y * yPixels;
+//			double x = i - WIDTH / 2;
+//			x = x / xPixels;
+			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(i))); 
+			y = y / yRange;
 			y = HEIGHT / 2 - y;
-			if(y > 0 && y < HEIGHT) {
-				graph.drawString(".", i, (int) y);
+			if (y > 0 && y < HEIGHT) {
+				graph.drawString(".", i + WIDTH / 2, (int) y);
 			}
 		}
 	}
@@ -106,6 +108,56 @@ public class GraphPanel extends JPanel {
 	public void setYPixels() {
 		yPixels = HEIGHT / yRange;
 	}
+	
+	public void setStrokeColor(Color color) {
+		strokeColor = color;
+	}
+	
+	public Color getStrokeColor() {
+		return strokeColor;
+	}
+
+
+	public int getxMin() {
+		return xMin;
+	}
+
+
+	public void setxMin(int xMin) {
+		this.xMin = xMin;
+	}
+
+
+	public int getxMax() {
+		return xMax;
+	}
+
+
+	public void setxMax(int xMax) {
+		this.xMax = xMax;
+	}
+
+
+	public int getyMin() {
+		return yMin;
+	}
+
+
+	public void setyMin(int yMin) {
+		this.yMin = yMin;
+	}
+
+
+	public int getyMax() {
+		return yMax;
+	}
+
+
+	public void setyMax(int yMax) {
+		this.yMax = yMax;
+	}
+	
+	
 	
 
 }
