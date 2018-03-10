@@ -20,11 +20,6 @@ public class GraphPanel extends JPanel {
 	Graphics graph;
 	private Color strokeColor = Color.BLACK;
 	
-	private int xMin;
-	private int xMax;
-	private int yMin;
-	private int yMax;
-	
 	
 	public GraphPanel() {
 		
@@ -61,15 +56,16 @@ public class GraphPanel extends JPanel {
 	}
 	
 	public void plotGraph() {
-		for(int i = xMin; i < xMax; i++) {
+		for(int i = 0; i < WIDTH; i++) {
 			//distance of x from origin
-//			double x = i - WIDTH / 2;
-//			x = x / xPixels;
-			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(i))); 
-			y = y / yRange;
+			double x = i - WIDTH / 2;
+			x = x / xPixels;
+		
+			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(x))); 
+			y = y * yPixels;
 			y = HEIGHT / 2 - y;
 			if (y > 0 && y < HEIGHT) {
-				graph.drawString(".", i + WIDTH / 2, (int) y);
+				graph.drawString(".", i, (int) y);
 			}
 		}
 	}
@@ -115,49 +111,7 @@ public class GraphPanel extends JPanel {
 	
 	public Color getStrokeColor() {
 		return strokeColor;
-	}
-
-
-	public int getxMin() {
-		return xMin;
-	}
-
-
-	public void setxMin(int xMin) {
-		this.xMin = xMin;
-	}
-
-
-	public int getxMax() {
-		return xMax;
-	}
-
-
-	public void setxMax(int xMax) {
-		this.xMax = xMax;
-	}
-
-
-	public int getyMin() {
-		return yMin;
-	}
-
-
-	public void setyMin(int yMin) {
-		this.yMin = yMin;
-	}
-
-
-	public int getyMax() {
-		return yMax;
-	}
-
-
-	public void setyMax(int yMax) {
-		this.yMax = yMax;
-	}
-	
-	
+	}	
 	
 
 }

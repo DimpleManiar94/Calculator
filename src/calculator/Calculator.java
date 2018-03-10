@@ -86,28 +86,33 @@ public class Calculator {
 		initKeyboardListeners();			
 	}
 	
+	/**
+	 * Initialize all listeners to react to button changes etc
+	 */
 	private void initEquationListeners() {
 		equationPanel.getPlotButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Get equation
 				String equation = equationPanel.getEquation();
+				// Validate equation and show error if not valid
+				if (!ValidateEquation.isEquationValid(equation)) {
+					JOptionPane.showMessageDialog(frame,
+						    "Invalid equation");
+					return;
+				}
 				graphPanel.setGraphEquation(equation);
 		
 				
 				// Get the x range
 				String xRange = equationPanel.getXRange();
 				int xFrom = Integer.parseInt(xRange.substring(xRange.indexOf("[") + 1, xRange.indexOf(",")));
-				graphPanel.setxMin(xFrom);
 				int xTo = Integer.parseInt(xRange.substring(xRange.indexOf(",") + 1, xRange.indexOf("]")));
-				graphPanel.setxMax(xTo);
 				graphPanel.setXRange(xTo - xFrom);
 				
 				// Get the Y range
 				String yRange = equationPanel.getYRange();
 				int yFrom = Integer.parseInt(yRange.substring(yRange.indexOf("[") + 1, yRange.indexOf(",")));
-				graphPanel.setyMin(yFrom);
 				int yTo = Integer.parseInt(yRange.substring(yRange.indexOf(",") + 1, yRange.indexOf("]")));
-				graphPanel.setyMax(yTo);
 				graphPanel.setYRange(yTo - yFrom);
 				
 				// Redraw
@@ -159,6 +164,9 @@ public class Calculator {
 		
 	}*/
 	
+	/**
+	 * Initialize listeners for history panel
+	 */
 	private void initHistoryListeners() {
 		historyPanel.getLoadButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -168,6 +176,7 @@ public class Calculator {
 				equation = equation.substring(equation.indexOf("=") + 2);
 				//equation = equation.substring(11, equation.length());
 				equationPanel.setEquation(equation);
+				equationPanel.getPlotButton().doClick();
 			}
 		});
 	}
@@ -306,6 +315,13 @@ public class Calculator {
 		}
 	}
 	
+	/**
+	 * Method that gives you a Color object given
+	 * a string
+	 * 
+	 * @param color
+	 * @return
+	 */
 	private Color getColorFromString(String color) {
 		switch(color) {
 		case "BLACK":
