@@ -94,11 +94,11 @@ public class Calculator {
 				String xRange = equationPanel.getXRange();
 				int xFrom = Integer.parseInt(xRange.substring(xRange.indexOf("[") + 1, xRange.indexOf(",")));
 				int xTo = Integer.parseInt(xRange.substring(xRange.indexOf(",") + 1, xRange.indexOf("]")));
-				graphPanel.setXRange(xTo - xFrom);
+				//graphPanel.setXRange(xTo - xFrom);
 				String yRange = equationPanel.getYRange();
 				int yFrom = Integer.parseInt(yRange.substring(yRange.indexOf("[") + 1, yRange.indexOf(",")));
 				int yTo = Integer.parseInt(yRange.substring(yRange.indexOf(",") + 1, yRange.indexOf("]")));
-				graphPanel.setYRange(yTo - yFrom);
+				//graphPanel.setYRange(yTo - yFrom);
 				GraphPanel panel = new GraphPanel(equation, xTo - xFrom, yTo - yFrom);
 				panel.setBounds(370, 35, 794, 600);
 				frame.getContentPane().add(panel);
