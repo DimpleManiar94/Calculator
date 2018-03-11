@@ -26,10 +26,10 @@ public class ValidateEquation {
 				temp = "-" + temp;
 			else if (ch != '+' &&  ch != '*' && ch != '/' && ch !='^')
 				temp = temp + ch;
-			else if (temp != "")
-			{
+			else if (temp != "") {
 				val.push(Double.parseDouble(temp));
 				op.push((int)ch);
+				
 				temp = "";
 			}
 		}
@@ -93,49 +93,126 @@ public class ValidateEquation {
 		return Double.parseDouble(result);
 	}
 	
+	/**
+	 * Function that implements the evaluation of trignometric equations.
+	 * Only determines the type of trig function and delegates to another
+	 * function
+	 * 
+	 * @param equation
+	 * @return
+	 */
 	public static double evaulateTrignometricExpression(String equation ) {
 		if (equation.contains("sin")) {
-			String expression = getExpressionInTrigEquation("sin", equation);
-			double expressionValue = evaluateExpression(expression);
-			return Math.sin(expressionValue);
-			
+			return evaluateTrignometricExpression("sin", equation);
 		}
 		if (equation.contains("cosec")) {
-			String expression = getExpressionInTrigEquation("cosec", equation);
-			double expressionValue = evaluateExpression(expression);
-			return 1 / Math.cos(expressionValue);
+			return evaluateTrignometricExpression("cosec", equation);
 			
 		}
 		if (equation.contains("cos")) {
-			String expression = getExpressionInTrigEquation("cos", equation);
-			double expressionValue = evaluateExpression(expression);
-			return Math.cos(expressionValue);
+			return evaluateTrignometricExpression("cos", equation);
 			
 		}
 		if (equation.contains("tan")) {
-			String expression = getExpressionInTrigEquation("tan", equation);
-			double expressionValue = evaluateExpression(expression);
-			return Math.tan(expressionValue);
+			return evaluateTrignometricExpression("tan", equation);
 			
 		}
 		if (equation.contains("sec")) {
-			String expression = getExpressionInTrigEquation("sec", equation);
-			double expressionValue = evaluateExpression(expression);
-			return 1 / Math.sin(expressionValue);
+			return evaluateTrignometricExpression("sec", equation);
 			
 		}
 		if (equation.contains("cot")) {
-			String expression = getExpressionInTrigEquation("cot", equation);
-			double expressionValue = evaluateExpression(expression);
-			return 1 / Math.tan(expressionValue);
+			return evaluateTrignometricExpression("cot", equation);
 			
 		}
 		return evaluateExpression(equation);
 	}
 	
+	/**
+	 * Evaluates the trig equation given the trignometric type (sin, cos, etc.)
+	 * 
+	 * @param trigType
+	 * @param equation
+	 * @return
+	 */
+	public static double evaluateTrignometricExpression(String trigType, String equation) {
+		// Get the trignometric equation and get it's corresponding trig value
+		String expression = getExpressionInTrigEquation(trigType, equation);
+		double expressionValue = evaluateExpression(expression);
+		double trigValue = getTrignometricValue(trigType, expressionValue);
+		
+		// Get equation before the trignometric equation, if any
+		String beforeExpression = getExpressionBeforeTrig(trigType, equation);
+		double beforeValue = 0;
+		if (beforeExpression != "") {
+			// Get value of that equation
+			beforeValue = evaluateExpression(beforeExpression);
+			char op = getOperand(trigType, equation);
+			// Evaluate the two and return
+			return evaluateTwoValues(beforeValue, trigValue, op);
+		}
+		return trigValue;
+	}
+	
+	/**
+	 * Simple switch case to get the value depending on trignometric type (sin, cos, etc)
+	 * @param trigType
+	 * @param expressionValue
+	 * @return
+	 */
+	private static double getTrignometricValue(String trigType, double expressionValue) {
+		if (trigType == "sin") {
+			return Math.sin(expressionValue);
+		} else if (trigType == "cosec") {
+			return 1/Math.sin(expressionValue);
+		} else if (trigType == "cos") {
+			return Math.cos(expressionValue);
+		} else if (trigType == "tan") {
+			return Math.tan(expressionValue);
+		} else if (trigType == "cot") {
+			return 1 / Math.tan(expressionValue);
+		} else if (trigType == "sec") {
+			return 1 / Math.cos(expressionValue);
+		}
+		return 1;
+	}
+	
+	/**
+	 * Returns the expression within the trig. i.e 
+	 * sin(x+2) -> x+2
+	 * @param trigType
+	 * @param equation
+	 * @return
+	 */
 	private static String getExpressionInTrigEquation(String trigType, String equation) {
-		// All trig functions are 3 letter. Eg. sin, cos, tan, sec, cosec, 
-		return equation.substring(trigType.length() + 1, equation.length() - 1);
+		return equation.substring(equation.indexOf(trigType) + trigType.length() + 1, equation.length() - 1);
+	}
+	
+	/**
+	 * Returns the expression before trig expression if any
+	 * Eg. x*sin(x) -> x
+	 * Eg. x^2+sin(x) -> x^2
+	 * @param trigType
+	 * @param equation
+	 * @return
+	 */
+	private static String getExpressionBeforeTrig(String trigType, String equation) {
+		if (equation.indexOf(trigType) > 0) {
+			// We do have something before the trig equation
+			return equation.substring(0, equation.indexOf(trigType) - 1);
+		}
+		return "";
+	}
+	
+	/**
+	 * Get operand between two equations
+	 * Eg. x+sin(x) -> '+'
+	 * @param trigType
+	 * @param equation
+	 * @return
+	 */
+	private static char getOperand(String trigType, String equation) {
+		return equation.charAt(equation.indexOf(trigType) - 1);
 	}
 
 	 public static boolean isEquationValid(String equation) {
@@ -180,6 +257,32 @@ public class ValidateEquation {
 		 }
 	 }
 	 
+	 /**
+	  * Given two values and an operand, returns the result
+	  * @param first
+	  * @param second
+	  * @param op
+	  * @return
+	  */
+	 private static double evaluateTwoValues(double first, double second, char op) {
+		 switch(op) {
+		 	case '+':
+		 		return first + second;
+		 	case '*':
+		 		return first*second;
+		 	case '-':
+		 		return first - second;
+		 	case '/':
+		 		return first/second;
+		 	default: return first;
+		 }
+	 }
+	 
+	 /**
+	  * Check if equation is trignometric or not
+	  * @param equation
+	  * @return
+	  */
 	 private static boolean isTrignometricEquation(String equation) {
 		 return equation.contains("sin") || equation.contains("cos") || equation.contains("tan") || equation.contains("cot")
 				 || equation.contains("sec") || equation.contains("cosec");
