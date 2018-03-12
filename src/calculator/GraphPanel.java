@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GraphPanel extends JPanel {
+	
 	private String graphEquation;
 	final int WIDTH = 792;
 	final int HEIGHT = 600;
@@ -17,22 +18,17 @@ public class GraphPanel extends JPanel {
 	private double xPixels;
 	private double yPixels;
 	Graphics graph;
+	private Color strokeColor = Color.BLACK;
 	
 	
 	public GraphPanel() {
 		
 	}
 	
-	public GraphPanel(String graphEquation, int xRange, int yRange) {
-		this.graphEquation = graphEquation;
-		setXRange(xRange);
-		setYRange(yRange);
-	}
-	
+
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		g.setColor(Color.BLACK);
 		graph = g;
 		//Draw axis
 		graph.drawLine( 0, 600/2, 794, 600/2 );
@@ -44,6 +40,7 @@ public class GraphPanel extends JPanel {
 		graph.drawString("(0,0)", 792/2 + 5, 315);
 		
 		if (graphEquation != null) {
+			g.setColor(strokeColor);
 			plotGraph();
 		}
 		
@@ -63,10 +60,11 @@ public class GraphPanel extends JPanel {
 			//distance of x from origin
 			double x = i - WIDTH / 2;
 			x = x / xPixels;
+		
 			double y = ValidateEquation.evaluateExpression(graphEquation.replaceAll("x", String.valueOf(x))); 
 			y = y * yPixels;
 			y = HEIGHT / 2 - y;
-			if(y > 0 && y < HEIGHT) {
+			if (y > 0 && y < HEIGHT) {
 				graph.drawString(".", i, (int) y);
 			}
 		}
@@ -106,6 +104,14 @@ public class GraphPanel extends JPanel {
 	public void setYPixels() {
 		yPixels = HEIGHT / yRange;
 	}
+	
+	public void setStrokeColor(Color color) {
+		strokeColor = color;
+	}
+	
+	public Color getStrokeColor() {
+		return strokeColor;
+	}	
 	
 
 }

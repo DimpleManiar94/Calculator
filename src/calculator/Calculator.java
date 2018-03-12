@@ -86,25 +86,64 @@ public class Calculator {
 		initKeyboardListeners();			
 	}
 	
+	/**
+	 * Initialize all listeners to react to button changes etc
+	 */
 	private void initEquationListeners() {
 		equationPanel.getPlotButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Get equation
 				String equation = equationPanel.getEquation();
-//				graphPanel.setGraphEquation(equation);
+				// Validate equation and show error if not valid
+				if (!ValidateEquation.isEquationValid(equation)) {
+					JOptionPane.showMessageDialog(frame,
+						    "Invalid equation");
+					return;
+				}
+				graphPanel.setGraphEquation(equation);
+		
+				
+				// Get the x range
 				String xRange = equationPanel.getXRange();
 				int xFrom = Integer.parseInt(xRange.substring(xRange.indexOf("[") + 1, xRange.indexOf(",")));
 				int xTo = Integer.parseInt(xRange.substring(xRange.indexOf(",") + 1, xRange.indexOf("]")));
-				//graphPanel.setXRange(xTo - xFrom);
+				graphPanel.setXRange(xTo - xFrom);
+				
+				// Get the Y range
 				String yRange = equationPanel.getYRange();
 				int yFrom = Integer.parseInt(yRange.substring(yRange.indexOf("[") + 1, yRange.indexOf(",")));
 				int yTo = Integer.parseInt(yRange.substring(yRange.indexOf(",") + 1, yRange.indexOf("]")));
-				//graphPanel.setYRange(yTo - yFrom);
-				GraphPanel panel = new GraphPanel(equation, xTo - xFrom, yTo - yFrom);
-				panel.setBounds(370, 35, 794, 600);
-				frame.getContentPane().add(panel);
-				//graphPanel.setLayout(null);
-				panel.setBackground(Color.LIGHT_GRAY);
+				graphPanel.setYRange(yTo - yFrom);
+				
+				// Redraw
+				graphPanel.repaint();
+				
+				// Add to history
 				historyPanel.addToHistory("PLOT: y = " + equation);
+			}
+		});
+		
+		equationPanel.getEraseButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String equation = equationPanel.getEquation();
+				
+				graphPanel.repaint();
+				historyPanel.addToHistory("ERASE: y = " + equation);
+			}
+			
+		});
+		
+		equationPanel.getColorComboBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Get color string
+				String colorString = equationPanel.getColorComboBox().getSelectedItem().toString();
+				// Get Color object
+				Color color = getColorFromString(colorString);
+				// Change equation text color
+				equationPanel.changeColorOfText(color);
+				// Change graph stroke color
+				graphPanel.setStrokeColor(color);
+				graphPanel.repaint();
 			}
 		});
 	}
@@ -126,6 +165,9 @@ public class Calculator {
 		
 	}*/
 	
+	/**
+	 * Initialize listeners for history panel
+	 */
 	private void initHistoryListeners() {
 		historyPanel.getLoadButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -135,6 +177,7 @@ public class Calculator {
 				equation = equation.substring(equation.indexOf("=") + 2);
 				//equation = equation.substring(11, equation.length());
 				equationPanel.setEquation(equation);
+				equationPanel.getPlotButton().doClick();
 			}
 		});
 	}
@@ -270,6 +313,30 @@ public class Calculator {
 					state = "operation";
 				}
 			});
+		}
+	}
+	
+	/**
+	 * Method that gives you a Color object given
+	 * a string
+	 * 
+	 * @param color
+	 * @return
+	 */
+	private Color getColorFromString(String color) {
+		switch(color) {
+		case "BLACK":
+			return Color.BLACK;
+		case "BLUE":
+			return Color.BLUE;
+		case "RED":
+			return Color.RED;
+		case "GREEN":
+			return Color.GREEN;
+		case "YELLOW":
+			return Color.YELLOW;
+			default:
+				return Color.BLACK;
 		}
 	}
 }
