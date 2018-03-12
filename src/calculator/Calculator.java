@@ -125,10 +125,17 @@ public class Calculator {
 		
 		equationPanel.getEraseButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String equation = equationPanel.getEquation();
-				
-				graphPanel.repaint();
-				historyPanel.addToHistory("ERASE: y = " + equation);
+				// Set blank equation and repaint
+				String currentEquation = equationPanel.getEquation();
+				if (graphPanel.getGraphEquation().equals(currentEquation)) {
+					graphPanel.setGraphEquation(null);
+					graphPanel.repaint();
+					historyPanel.addToHistory("ERASE: y = " + currentEquation);
+				} else {
+					JOptionPane.showMessageDialog(frame,
+						    "The equation you asked to erase isn't the one that's plotted");
+					return;
+				}
 			}
 			
 		});
